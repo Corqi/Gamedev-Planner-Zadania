@@ -6,3 +6,4 @@ Programiści przez przypadek wykasowali część kodu potrzebnej do eksportowani
 Z modułu cryptography.fernet, zaimportuj Feret, a następnie za jego pomocą zaszyfruj dowolną wiadomość.
 
 ### Zadanie 3 - Praca na GUI
+Zadanie polegające na dodaniu funkcjonalnościu do GUI
