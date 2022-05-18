@@ -1,0 +1,68 @@
+<SpeechBubblePopup>:
+    auto_dismiss: False
+    background: 'atlas://data/images/defaulttheme/button_pressed'
+    size_hint: (0.5, 0.7)
+
+    title: "Edit"
+
+    BoxLayout:
+        spacing: 20
+        orientation: "vertical"
+        BoxLayout:
+            orientation: "vertical"
+            Label:
+                size_hint: (1, 0.3)
+                # You have to set the text size to change the text alignment
+                text_size: self.size
+                halign: 'left'
+                text: "Utterance:"
+
+            TextInput:
+                id: utterance_text_input
+                text: ""
+
+        BoxLayout:
+            orientation: "vertical"
+            Label:
+                size_hint: (1, 0.3)
+                # You have to set the text size to change the text alignment
+                text_size: self.size
+                halign: 'left'
+                text: "Tags:"
+
+            TextInput:
+                id: tags_text_input
+                multiline: False
+                text: ""
+
+        BoxLayout:
+            orientation: "vertical"
+            Label:
+                size_hint: (1, 0.3)
+                # You have to set the text size to change the text alignment
+                text_size: self.size
+                halign: 'left'
+                text: "Answers:"
+
+            BoxLayout:
+                id: answers_box
+                size_hint: (1, 0.3)
+
+            Button:
+                id: add_answer_button
+                text: "Add answer"
+
+        Button:
+            id: back_button
+            size_hint: (1, 0.3)
+            text: 'Close!'
+
+<AnswerPopup>:
+    size_hint: (None, None)
+    size: (300, 40)
+    title: ""
+    separator_height: 0
+    TextInput:
+        id: answer_input_text
+        focus: True
+        multiline: False

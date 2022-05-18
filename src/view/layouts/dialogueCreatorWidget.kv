@@ -1,0 +1,27 @@
+<DialogueCreatorWidget>
+    id: dialogue_creator_widget
+    name: "dialogue_creator_widget"
+    pos_hint: {'x': 0, 'y': 0}
+
+    ScrollView:
+        id: scroll_view
+        scroll_timeout: float('inf')
+
+        size_hint_y: 1
+
+
+    StackLayout:
+        orientation: "rl-tb"
+        padding: [10, 10, 10, 10]
+        spacing: [10, 10]
+        size_hint_y: 0.1
+
+        Button:
+            id: add_new_bubble_button
+            size_hint_x: 0.2
+            text: "Add new bubble"
+
+        Button:
+            id: remove_bubble_button
+            size_hint_x: 0.2
+            text: "Remove bubble"
