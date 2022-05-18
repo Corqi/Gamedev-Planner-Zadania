@@ -5,4 +5,4 @@ Programiści przez przypadek wykasowali część kodu potrzebnej do eksportowani
 ### Zadanie 2 -  Szyfrowanie danych
 Z modułu cryptography.fernet, zaimportuj Feret, a następnie za jego pomocą zaszyfruj dowolną wiadomość.
 
-### Zadanie 3 -
+### Zadanie 3 - Praca na GUI
