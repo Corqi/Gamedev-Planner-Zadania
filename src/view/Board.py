@@ -136,7 +136,6 @@ class Board(RelativeLayout):
 
     # noinspection PyPep8Naming
     def export_to_INK(self):
-        # do dupy to
         bubbles = []
         # generate better bubbles >:)
         for bubble in self.bubbles:
