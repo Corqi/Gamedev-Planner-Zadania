@@ -6,6 +6,6 @@ Programiści przez przypadek wykasowali część kodu potrzebnej do eksportowani
 Z modułu cryptography.fernet, zaimportuj Fernet, a następnie za jego pomocą zaszyfruj oraz odszyfruj dowolną wiadomość.
 
 ### Zadanie 3 - Praca na GUI
-Wzorując się na TableWidget i DialogueCreatorWidget, utwórz w bocznym pasku nowy guzik otwierający widget Test.
+Wzorując się na TableWidget i DialogueCreatorWidget, utwórz w bocznym pasku nowy guzik otwierający widget o nazwie Test.
 Dodaj guzik w pliku projectViewWindow.kv oraz zaimplementuj jego działaniu w ProjectViewWindow.py.
 Następnie utwórz plik TestWidget.py, w którym wykorzystasz testWidget.kv.
