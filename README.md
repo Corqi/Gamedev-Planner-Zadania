@@ -3,7 +3,7 @@
 Programiści przez przypadek wykasowali część kodu potrzebnej do eksportowania dialogu do plików .ink. Uzupełnij ten kod, tak aby funkcja znowu działała poprawnie (Funkcję znajdziesz w pliku Board.py pod nazwą export_to_INK).
 
 ### Zadanie 2 -  Szyfrowanie danych
-Z modułu cryptography.fernet, zaimportuj Fernet, a następnie za jego pomocą zaszyfruj dowolną wiadomość.
+Z modułu cryptography.fernet, zaimportuj Fernet, a następnie za jego pomocą zaszyfruj oraz odszyfruj dowolną wiadomość.
 
 ### Zadanie 3 - Praca na GUI
 Zadanie polegające na dodaniu funkcjonalnościu do GUI
