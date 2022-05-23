@@ -27,21 +27,20 @@
                 size: self.size
 
 
-    AnchorLayout:
-        anchor_x: 'right'
-        padding: [0, 0, 10, 10]
-        size_hint_y: 0.15
+    StackLayout:
+        orientation: "rl-tb"
+        padding: [10, 10, 10, 10]
+        spacing: [10, 10]
+        size_hint_y: 0.1
 
-        BoxLayout:
-            orientation: "vertical"
-            size_hint: 0.2, 1
+        Button:
+            id: add_new_note_button
+            size_hint_y: 1
+            size_hint_x: 0.06
+            text: "+"
 
-            Button:
-                id: add_new_image
-                size_hint_x: 1
-                text: "Add new image"
-
-            Button:
-                id: add_new_note
-                size_hint_x: 1
-                text: "Add new note"
+        Button:
+            id: remove_note_button
+            size_hint_y: 1
+            size_hint_x: 0.06
+            text: "-"

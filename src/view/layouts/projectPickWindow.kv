@@ -2,6 +2,14 @@
     id: project_pick_window
     name: 'project_pick_window'
 
+    canvas.before:
+        Color:
+            rgba: 35/255, 35/255, 35/255, 1
+        Rectangle:
+            # self here refers to the widget i.e FloatLayout
+            pos: self.pos
+            size: self.size
+
     FloatLayout:
         cols: 1
         size_hint: .5, .5
@@ -10,17 +18,24 @@
         size_hint_max: 400, 300
         canvas.before:
             Color:
-                rgba: 0, 1, 0, 1
-            Rectangle:
+                rgba: 51/255, 51/255, 51/255, 1
+            RoundedRectangle:
                 # self here refers to the widget i.e FloatLayout
                 pos: self.pos
                 size: self.size
 
         GridLayout:
+            padding: [10, 10, 10, 10]
+            spacing: [10, 10]
             cols:1
             pos_hint: {'center_x':0.5, 'center_y':0.5}
             Button:
                 id: open_project_button
+                background_normal: 'res/menu_button.png'
+                background_down: 'res/menu_button_pressed.png'
                 text: "Open project"
             Button:
+                id: create_project_button
+                background_normal: 'res/menu_button.png'
+                background_down: 'res/menu_button_pressed.png'
                 text: "Create new project"

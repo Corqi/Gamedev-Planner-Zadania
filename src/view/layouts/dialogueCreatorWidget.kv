@@ -7,6 +7,14 @@
         id: scroll_view
         scroll_timeout: float('inf')
 
+        canvas.before:
+            Color:
+                rgba: 39/255, 39/255, 39/255, 1
+            Rectangle:
+                # self here refers to the widget i.e FloatLayout
+                pos: self.pos
+                size: self.size
+
         size_hint_y: 1
 
 
@@ -18,10 +26,17 @@
 
         Button:
             id: add_new_bubble_button
-            size_hint_x: 0.2
-            text: "Add new bubble"
+            size_hint_y: 1
+            size_hint_x: 0.06
+            text: '+'
 
         Button:
             id: remove_bubble_button
+            size_hint_y: 1
+            size_hint_x: 0.06
+            text: "-"
+
+        Button:
+            id: export_dialogue_button
             size_hint_x: 0.2
-            text: "Remove bubble"
+            text: "Export Dialogue"

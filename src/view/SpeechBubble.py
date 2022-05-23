@@ -1,9 +1,9 @@
 from kivy.lang import Builder
 from kivy.uix.relativelayout import RelativeLayout
-from kivy.uix.button import Button
-from kivy.graphics import Color, Rectangle
+from kivy.graphics import Color, RoundedRectangle
 from kivy.core.window import Window
 from SpeechBubblePopup import SpeechBubblePopup
+from AnswerButton import AnswerButton
 
 Builder.load_file("layouts/speechBubble.kv")
 
@@ -12,35 +12,30 @@ class SpeechBubble(RelativeLayout):
     # relative position of bubble to mouse
     relative_pos = (0, 0)
 
-    def __init__(self, answers=None, utterance="", tags="", offset=(100, 700), **kwargs):
+    def __init__(self, answers=None, utterance="", tags="", position=(100, 700), bubble_id=None, **kwargs):
         super().__init__(**kwargs)
 
-        # TODO it will be necessary to load this data from a special dialogue class
-        # TODO now answers are recognizable only by text but they should have some kind of id
-        self.answers = answers
         if answers is None:
-            self.answers = []
+            answers = []
+
+        self.bubble_id = bubble_id
+        self.answer_id = 0
+        self.answer_buttons = {}
+        for answer in answers:
+            self.answer_buttons.update({self.answer_id: self.create_answer(answer)})
+            self.answer_id += 1
 
         self.utterance = utterance
         self.tags = tags
-        #self.connections = []
-        # temporary
 
-        #self.pos = (100, 700)
         self.set_bubble_size()
 
         Window.bind(mouse_pos=self.hover)
 
         # background initialization
         with self.canvas.before:
-            self.color = Color(0.1, 0.5, 0.9, 1)
-            self.rect = Rectangle(pos=(0, 0), size=self.size)
-
-        # TODO simplify logic responsible for answer handling
-        # set answer buttons on create bubble
-        self.answer_buttons = []
-        for ans in self.answers:
-            self.answer_buttons.append(Button(text=ans, on_release=self.answer_button_clicked))
+            self.color = Color(0.3, 0.3, 0.3, 1)
+            self.rect = RoundedRectangle(pos=(0, 0), size=self.size)
 
         self.input_button = self.ids.input_button
         self.input_button.bind(on_release=self.input_button_clicked)
@@ -49,8 +44,8 @@ class SpeechBubble(RelativeLayout):
 
         # compensate for note size
         size = self.rect.size
-        offset = (offset[0] - size[0] / 2, offset[1] - size[1] / 2)
-        self.pos = offset
+        position = (position[0] - size[0] / 2, position[1] - size[1] / 2)
+        self.pos = position
 
     def hover(self, *args):
         # get the coords of SpeechBubble
@@ -86,7 +81,7 @@ class SpeechBubble(RelativeLayout):
             self.color.b = color[2]
 
     def refresh_bubble(self):
-        self.set_text()
+        self.ids.utterance_label.text = self.utterance
         self.show_answer_buttons()
         self.set_bubble_size()
         self.unpressed()
@@ -97,7 +92,7 @@ class SpeechBubble(RelativeLayout):
             min_width = 150
             min_height = 100
 
-            width_from_answers = 50 * len(self.answers)
+            width_from_answers = 50 * len(self.answer_buttons)
 
             width_from_utterance = 0
             height_from_utterance = 0
@@ -115,49 +110,32 @@ class SpeechBubble(RelativeLayout):
 
         self.size = (width, height)
 
-    def set_text(self):
-        self.ids.utterance_label.text = self.utterance
-
     def add_answer(self, ans):
-        self.answers.append(ans)
-        self.answer_buttons.append(Button(text=ans, on_release=self.answer_button_clicked))
+        answer_button = self.create_answer(ans)
+        self.answer_buttons.update({self.answer_id: answer_button})
+        self.answer_id += 1
         self.show_answer_buttons()
+        return answer_button
 
-    def remove_answer(self, ans):
-        # TODO simplify this logic
-        print(self.answers)
-        self.answers.remove(ans)
-        btn = None
-        for button in self.answer_buttons:
-            if button.text == ans:
-                btn = button
-                print("Find")
-        self.answer_buttons.remove(btn)
-        # for connection in self.connections:
-        #     if connection.start_button == btn:
-        #         connection.remove()
-        self.parent.check_connection(self, btn)
+    def create_answer(self, answer_text=None):
+        return AnswerButton(self.answer_id, answer_text, on_release=self.answer_button_clicked)
+
+    def remove_answer(self, answer_id):
+        button = self.answer_buttons.pop(answer_id)
+        self.parent.check_connection(self, button)
 
         self.show_answer_buttons()
 
     def show_answer_buttons(self):
         self.ids.answers_box.clear_widgets()
 
-        for button in self.answer_buttons:
+        for button in self.answer_buttons.values():
             self.ids.answers_box.add_widget(button)
 
-        # for connection in self.connections:
-        #     connection.update_points(self)
-        # TODO testing
         if self.parent is not None:
             self.parent.refresh_connection(self)
 
     def answer_button_clicked(self, instance):
-        # for connection in self.connections:
-        #     if connection.start_button == instance:
-        #         # do sth when button has connection
-        #         connection.remove()
-        #         return
         if self.parent.check_connection(self, instance):
             return
 
@@ -182,12 +160,6 @@ class SpeechBubble(RelativeLayout):
 
     def enable_input_buttons(self):
         self.ids.input_button.disabled = False
-
-    # def add_connection(self, connection):
-    #     self.connections.append(connection)
-
-    # def remove_connection(self, connection):
-    #     self.connections.remove(connection)
 
     def on_touch_down(self, touch):
         if self.ids.bubble_info_box.collide_point(*self.to_local(*touch.pos)) \
@@ -215,8 +187,6 @@ class SpeechBubble(RelativeLayout):
         if touch.grab_current is self:
             # I received my grabbed touch
             self.pos = [touch.pos[0] - self.relative_pos[0], touch.pos[1] - self.relative_pos[1]]
-            # for connection in self.connections:
-            #     connection.update_points(self)
             if self.parent is not None:
                 self.parent.refresh_connection(self)
         else:
@@ -233,19 +203,31 @@ class SpeechBubble(RelativeLayout):
             super(SpeechBubble, self).on_touch_up(touch)
 
     def pressed(self):
-        self.update_background((None, None, 0.5))
+        self.update_background((0.3, 0.3, 0.3))
 
     def unpressed(self):
-        self.update_background((None, None, 0.1))
+        self.update_background((0.1, 0.1, 0.1))
 
     def remove(self):
         # connections_to_delete = list(self.connections)
         # for connection in connections_to_delete:
         #     connection.remove()
-        for button in self.answer_buttons:
+
+        self.parent.parent.scroll_timeout = float('inf')
+        self.parent.is_busy = False
+        self.parent.child = None
+
+        for button in self.answer_buttons.values():
             self.parent.check_connection(self, button)
         self.parent.check_connection(self, self.input_button)
 
         Window.unbind(mouse_pos=self.hover)
 
-        self.parent.remove_bubble(self)
+        self.parent.remove_bubble(self.bubble_id)
+
+    def get_data(self):
+        answers = {}
+        for answer_id, answer_button in self.answer_buttons.items():
+            answers.update({answer_id: answer_button.text})
+        data = {"bubble_id": self.bubble_id, "utterance": self.utterance, "tags": self.tags, "ans": answers, "position": (self.pos[0] + self.width / 2, self.pos[1] + self.height / 2)}
+        return data

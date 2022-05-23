@@ -18,8 +18,7 @@ class Connection(Line):
                                                     self.end_button.pos[1] + self.end_button.height)
         self.points = [*self.start_points, *self.end_points]
 
-        #self.start_bubble.add_connection(self)
-        #self.end_bubble.add_connection(self)
+        self.width = 2
 
     def update_points(self, speech_bubble):
         # a method to allow line movement
@@ -34,6 +33,8 @@ class Connection(Line):
         self.points = [*self.start_points, *self.end_points]
 
     def remove(self):
-        #self.start_bubble.remove_connection(self)
-        #self.end_bubble.remove_connection(self)
         self.parent.remove_connection(self)
+
+    def get_data(self):
+        data = {"start_bubble_id": self.start_bubble.bubble_id, "answer_id": self.start_button.id, "end_bubble_id": self.end_bubble.bubble_id, "start_points": self.start_points}
+        return data

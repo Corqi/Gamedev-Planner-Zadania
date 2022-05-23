@@ -16,11 +16,10 @@ class Note(RelativeLayout):
     # relative position of note to mouse
     relative_pos = (0, 0)
 
-    def __init__(self, offset, **kwargs):
+    def __init__(self, text, position, **kwargs):
         super().__init__(**kwargs)
 
-        # TODO it will be necessary to load this data from a special dialogue class
-        self.utterance = ""
+        self.utterance = text
         # temporary
 
         self.set_note_size()
@@ -35,8 +34,8 @@ class Note(RelativeLayout):
         self.refresh_note()
 
         # compensate for note size
-        offset = (offset[0] - self.width/2, offset[1] - self.height/2)
-        self.pos = offset
+        position = (position[0] - self.width / 2, position[1] - self.height / 2)
+        self.pos = position
 
     def hover(self, *args):
         # get the coords of Note
@@ -106,11 +105,14 @@ class Note(RelativeLayout):
     def on_touch_down(self, touch):
         if self.ids.note_info_box.collide_point(*self.to_local(*touch.pos)):
             if touch.button == 'right':
-                print("Right")
                 popup = NotePopup(parent=self)
                 popup.open()
                 return True
             touch.grab(self)
+
+            if self.parent.deletion_enabled:
+                self.remove()
+                return True
 
             # calculate relative position
             self.relative_pos = (touch.pos[0] - self.pos[0], touch.pos[1] - self.pos[1])
@@ -144,6 +146,19 @@ class Note(RelativeLayout):
     def unpressed(self):
         self.update_background((248/255, 229/255, 144/255))
 
+    def remove(self):
+        self.parent.parent.scroll_timeout = float('inf')
+        self.parent.is_busy = False
+        self.parent.child = None
+
+        Window.unbind(mouse_pos=self.hover)
+
+        self.parent.remove_note(self)
+
+    def get_data(self):
+        data = {"text": self.utterance, "position": (self.pos[0] + self.width / 2, self.pos[1] + self.height / 2)}
+        return data
+
 
 class NotePopup(Popup):
     def __init__(self, parent, **kwargs):
@@ -170,9 +185,8 @@ class NoteImage(RelativeLayout):
     def __init__(self, source, offset, **kwargs):
         super().__init__(**kwargs)
 
-        # TODO it will be necessary to load this data from a special dialogue class
-
         Window.bind(mouse_pos=self.hover)
+
         self.ids.image.source = source
 
         self.ids.image.size = self.ids.image.texture.size
@@ -228,6 +242,10 @@ class NoteImage(RelativeLayout):
         if self.ids.image_info_box.collide_point(*self.to_local(*touch.pos)):
             touch.grab(self)
 
+            if self.parent.deletion_enabled:
+                self.remove()
+                return True
+
             # calculate relative position
             self.relative_pos = (touch.pos[0] - self.pos[0], touch.pos[1] - self.pos[1])
 
@@ -261,3 +279,12 @@ class NoteImage(RelativeLayout):
     def unpressed(self):
         self.update_background((248/255, 229/255, 144/255))
         self.ids.image.opacity = 1
+
+    def remove(self):
+        self.parent.parent.scroll_timeout = float('inf')
+        self.parent.is_busy = False
+        self.parent.child = None
+
+        Window.unbind(mouse_pos=self.hover)
+
+        self.parent.remove_note_image(self)

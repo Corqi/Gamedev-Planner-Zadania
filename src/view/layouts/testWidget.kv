@@ -1,0 +1,15 @@
+<TestWidget>
+    id: test_widget
+    name: "test_widget"
+    pos_hint: {'x': 0, 'y': 0}
+
+    canvas.before:
+        Color:
+            rgba: 0.2, 0.4, 0.2, 1
+        Rectangle:
+            # self here refers to the widget i.e FloatLayout
+            pos: self.pos
+            size: self.size
+
+    Label:
+        text: 'Test Widget'
