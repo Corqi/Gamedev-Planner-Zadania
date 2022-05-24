@@ -117,8 +117,10 @@ class SpeechBubble(RelativeLayout):
         self.show_answer_buttons()
         return answer_button
 
-    def create_answer(self, answer_text=None):
-        return AnswerButton(self.answer_id, answer_text, on_release=self.answer_button_clicked)
+    def create_answer(self, answer_text=None, id=None):
+        if id is None:
+            id = self.answer_id
+        return AnswerButton(id, answer_text, on_release=self.answer_button_clicked)
 
     def remove_answer(self, answer_id):
         button = self.answer_buttons.pop(answer_id)
@@ -150,7 +152,7 @@ class SpeechBubble(RelativeLayout):
             button.disabled = False
 
     def get_answer_by_id(self, ans_id):
-        return self.answer_buttons[ans_id]
+        return self.answer_buttons.get(ans_id)
 
     def input_button_clicked(self, instance):
         self.parent.make_connection(self, instance, "end")
