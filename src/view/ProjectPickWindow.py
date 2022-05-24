@@ -34,12 +34,14 @@ class ProjectPickWindow(Screen):
             self.project_view_window = ProjectViewWindow()
             self.parent.add_widget(self.project_view_window)
             project = ProjectReader().project
-            self.project_view_window.open_project(project)
-            self.parent.current = "project_view_window"
+            if project is not None:
+                self.project_view_window.open_project(project)
+                self.parent.current = "project_view_window"
         else:
             self.parent.remove_widget(self.project_view_window)
             self.project_view_window = ProjectViewWindow()
             self.parent.add_widget(self.project_view_window)
             project = ProjectReader().project
-            self.project_view_window.open_project(project)
-            self.parent.current = "project_view_window"
+            if project is not None:
+                self.project_view_window.open_project(project)
+                self.parent.current = "project_view_window"
