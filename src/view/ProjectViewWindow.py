@@ -2,7 +2,6 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
 from DialogueCreatorWidget import DialogueCreatorWidget
 from TableWidget import TableWidget
-from TestWidget import TestWidget
 from ProjectSaver import *
 
 Builder.load_file("layouts/projectViewWindow.kv")
