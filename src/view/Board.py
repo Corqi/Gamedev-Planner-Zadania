@@ -194,7 +194,7 @@ class Board(RelativeLayout):
 
         max_id = -1
         for bubble in bubbles_data:
-            self.add_bubble(bubble["ans"].values(), bubble["utterance"], bubble["tags"], bubble["position"], bubble["bubble_id"])
+            self.add_bubble(bubble["ans"], bubble["utterance"], bubble["tags"], bubble["position"], bubble["bubble_id"])
             if max_id < bubble["bubble_id"]:
                 max_id = bubble["bubble_id"]
 
