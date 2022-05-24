@@ -13,7 +13,7 @@ class SpeechBubble(RelativeLayout):
     relative_pos = (0, 0)
 
     def __init__(self, answers=None, utterance="", tags="", position=(100, 700), bubble_id=None, **kwargs):
-        super().init(**kwargs)
+        super().__init__(**kwargs)
 
         if answers is None:
             answers = {}
