@@ -13,17 +13,17 @@ class SpeechBubble(RelativeLayout):
     relative_pos = (0, 0)
 
     def __init__(self, answers=None, utterance="", tags="", position=(100, 700), bubble_id=None, **kwargs):
-        super().__init__(**kwargs)
+        super().init(**kwargs)
 
         if answers is None:
-            answers = []
+            answers = {}
 
         self.bubble_id = bubble_id
         self.answer_id = 0
         self.answer_buttons = {}
-        for answer in answers:
-            self.answer_buttons.update({self.answer_id: self.create_answer(answer)})
-            self.answer_id += 1
+        for answer_id, answer in answers.items():
+            self.answer_buttons.update({answer_id: self.create_answer(answer, answer_id)})
+            self.answer_id = answer_id + 1
 
         self.utterance = utterance
         self.tags = tags
